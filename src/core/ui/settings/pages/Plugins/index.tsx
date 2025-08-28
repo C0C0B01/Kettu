@@ -105,20 +105,6 @@ export default function Plugins() {
                 </Card>
             </View>;
         }}
-        ListFooterComponent={() => __DEV__ && (
-            <View style={{ alignItems: "center", justifyContent: "center", paddingTop: 16, gap: 12 }}><Button
-                size="lg"
-                text="Browse Plugins"
-                icon={findAssetId("CompassIcon")}
-                onPress={() => {
-                    navigation.push("PUPU_CUSTOM_PAGE", {
-                        title: "Plugin Browser",
-                        render: React.lazy(() => import("../PluginBrowser")),
-                    });
-                }}
-            />
-            </View>
-        )}
         installAction={{
             label: "Install a plugin",
             fetchFn: async (url: string) => {
