@@ -40,7 +40,7 @@ export function serve(options) {
 
     server.listen(args.port ?? 4040);
 
-    console.info(chalk.bold.yellowBright("Serving ra1n on:"));
+    console.info(chalk.bold.yellowBright("Serving Kettu on:"));
 
     const netInterfaces = os.networkInterfaces();
     for (const netinterfaces of Object.values(netInterfaces)) {
