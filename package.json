@@ -17,8 +17,7 @@
         "@semantic-release/changelog": "^6.0.3",
         "@semantic-release/exec": "^6.0.3",
         "@semantic-release/git": "^10.0.1",
-        "semantic-release": "^24.2.7",
-        "@swc/core": "^1.13.1",
+        "@swc/core": "^1.13.5",
         "@swc/helpers": "^0.5.17",
         "@types/node": "^20.19.9",
         "@types/yargs-parser": "^21.0.3",
@@ -33,6 +32,7 @@
         "eslint-plugin-react": "^7.37.5",
         "eslint-plugin-simple-import-sort": "^12.1.1",
         "eslint-plugin-unused-imports": "^3.2.0",
+        "semantic-release": "^24.2.7",
         "typescript": "^5.8.3",
         "yargs-parser": "^21.1.1"
     },
@@ -43,16 +43,18 @@
         "@types/chroma-js": "~2.4.5",
         "@types/lodash": "~4.17.20",
         "@types/react": "19.1.8",
-        "react-native": "0.78.0",
         "es-toolkit": "^1.39.7",
         "fuzzysort": "^3.1.0",
         "intl-messageformat": "^10.7.16",
         "moment": "2.22.2",
+        "react": "^19.2.0",
+        "react-dom": "^19.2.0",
+        "react-native": "0.78.0",
         "react-native-reanimated": "^3.18.0",
         "spitroast": "^1.4.4",
         "type-fest": "^4.41.0"
     },
-  "trustedDependencies": [
-    "@swc/core"
-  ]
+    "trustedDependencies": [
+        "@swc/core"
+    ]
 }
