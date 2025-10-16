@@ -4,5 +4,4 @@ yarn.lock
 .DS_Store
 lib-dist/
 /packages/types
-dist
 .directory
