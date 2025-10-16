@@ -34,7 +34,7 @@ export async function createVdPluginObject(plugin: VendettaPlugin) {
             // Wrapping this with wrapSync is NOT an option.
             storage: await createStorage<Record<string, any>>(storage.createMMKVBackend(plugin.id)),
         },
-        logger: new LoggerClass(`Kettu » ${plugin.manifest.name}`),
+        logger: new LoggerClass(`Saukko » ${plugin.manifest.name}`),
     };
 }
 

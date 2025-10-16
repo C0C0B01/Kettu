@@ -18,9 +18,9 @@ async function initializeKettu() {
 
         console.log(stack ?? e?.toString?.() ?? e);
         alert([
-            "Failed to load Kettu!\n",
+            "Failed to load Saukko!\n",
             `Build Number: ${ClientInfoManager.getConstants().Build}`,
-            `Kettu: ${version}`,
+            `Saukko: ${version}`,
             stack || e?.toString?.(),
         ].join("\n"));
     }

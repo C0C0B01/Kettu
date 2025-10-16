@@ -13,7 +13,7 @@ export default defineCorePlugin({
         main: "",
         display: {
             name: "QuickInstall",
-            description: "Quickly install Vendetta plugins and themes",
+            description: "Quickly install Saukko/Vendetta plugins and themes",
             authors: [{ name: "Vendetta Team" }]
         }
     },

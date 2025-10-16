@@ -46,5 +46,5 @@ export default async () => {
     window.bunny = lib;
 
     // We good :)
-    logger.log("Kettu is ready!");
+    logger.log("Saukko is ready!");
 };

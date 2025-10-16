@@ -12,10 +12,10 @@ export { PupuIcon };
 export default function initSettings() {
     
     registerSection({
-        name: "Kettu",
+        name: "Sauko",
         items: [
             {
-                key: "KETTU",
+                key: "SAUKKO",
                 title: () => Strings.PUPU,
                 icon: { uri: PupuIcon },
                 render: () => import("@core/ui/settings/pages/General"),

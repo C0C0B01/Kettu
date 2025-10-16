@@ -1,9 +1,9 @@
 {
-    "name": "Kettu",
+    "name": "Saukko",
     "private": true,
     "author": {
-        "name": "cocobo1",
-        "url": "https://github.com/C0C0B01"
+        "name": "Vaiskiainen",
+        "url": "https://github.com/Vaiskiainen"
     },
     "scripts": {
         "build": "node scripts/build.mjs",
