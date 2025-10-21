@@ -1,0 +1,12 @@
+{
+    "id": "dev.jules.messageextractor",
+    "version": "1.0.0",
+    "type": "plugin",
+    "spec": 3,
+    "main": "src/index.ts",
+    "display": {
+        "name": "Message Extractor",
+        "description": "Extracts all messages from the current channel into a detailed JSON file.",
+        "authors": [{ "name": "Jules" }]
+    }
+}

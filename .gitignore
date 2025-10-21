@@ -1,8 +1,1 @@
-node_modules/
-package-lock.json
-yarn.lock
-.DS_Store
-lib-dist/
-/packages/types
-dist
-.directory
+node_modules

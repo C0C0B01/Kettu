@@ -1,34 +1,10 @@
 {
-    "exclude": [
-        "dist"
-    ],
     "compilerOptions": {
         "strict": true,
-        "paths": {
-            // Just to discourage from consuming the module directly
-            "spitroast": ["./shims/emptyModule"],
-
-            "@core/*": ["./plugins/messageextractor/core/*"],
-            "@lib": ["./plugins/messageextractor/lib"],
-            "@lib/*": ["./plugins/messageextractor/lib/*"],
-            "@metro": ["./plugins/messageextractor/metro"],
-            "@metro/*": ["./plugins/messageextractor/metro/*"],
-            "@ui": ["./plugins/messageextractor/lib/ui"],
-            "@ui/*": ["./plugins/messageextractor/lib/ui/*"],
-            "@types": ["./plugins/messageextractor/lib/utils/types.ts"],
-            "@assets/*": ["./plugins/messageextractor/assets/*"]
-        },
         "module": "esnext",
         "moduleResolution": "bundler",
-        "resolveJsonModule": true,
-        "allowJs": true,
-        "checkJs": true,
-        "jsx": "react-jsx",
         "target": "esnext",
-
-        "skipLibCheck": true,
-        "declaration": true,
-        "emitDeclarationOnly": true,
-        "stripInternal": true
+        "jsx": "react-jsx",
+        "skipLibCheck": true
     }
 }
