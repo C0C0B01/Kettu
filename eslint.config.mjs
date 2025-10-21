@@ -5,6 +5,7 @@ import importAlias from "eslint-plugin-import-alias";
 import tsParser from "@typescript-eslint/parser";
 
 export default [{
+    files: ["plugins/messageextractor/**/*.ts", "plugins/messageextractor/**/*.tsx"],
     ignores: ["**/dist", "**/browser"],
 }, {
     plugins: {
@@ -106,19 +107,19 @@ export default [{
 
             aliases: [{
                 alias: "@metro",
-                matcher: "^src/lib/metro",
+                matcher: "^plugins/messageextractor/lib/metro",
             }, {
                 alias: "@core",
-                matcher: "^src/core",
+                matcher: "^plugins/messageextractor/core",
             }, {
                 alias: "@ui",
-                matcher: "^src/lib/ui",
+                matcher: "^plugins/messageextractor/lib/ui",
             }, {
                 alias: "@types",
-                matcher: "^src/lib/utils/types.ts",
+                matcher: "^plugins/messageextractor/lib/utils/types.ts",
             }, {
                 alias: "@lib",
-                matcher: "^src/lib",
+                matcher: "^plugins/messageextractor/lib",
             }],
         }],
     },
