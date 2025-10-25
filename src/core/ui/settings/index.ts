@@ -12,7 +12,7 @@ export { PupuIcon };
 export default function initSettings() {
     
     registerSection({
-        name: "Sauko",
+        name: "Saukko",
         items: [
             {
                 key: "SAUKKO",
@@ -53,6 +53,12 @@ export default function initSettings() {
                 icon: findAssetId("WrenchIcon"),
                 render: () => import("@core/ui/settings/pages/Developer"),
                 usePredicate: () => useProxy(settings).developerSettings ?? false
+            },
+            {
+                key: "SAUKKO_BROWSER",
+                title: () => Strings.BROWSER,
+                icon: findAssetId("UploadIcon"),
+                render: () => import("@core/ui/settings/pages/PluginBrowser"),
             }
         ]
     });

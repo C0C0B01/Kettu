@@ -11912,7 +11912,7 @@ Type: ${asset.type}`,
   // src/core/ui/settings/index.ts
   function initSettings() {
     registerSection({
-      name: "Sauko",
+      name: "Saukko",
       items: [
         {
           key: "SAUKKO",
@@ -11955,6 +11955,12 @@ Type: ${asset.type}`,
           icon: findAssetId("WrenchIcon"),
           render: () => Promise.resolve().then(() => (init_Developer(), Developer_exports)),
           usePredicate: () => useProxy(settings).developerSettings ?? false
+        },
+        {
+          key: "SAUKKO_BROWSER",
+          title: () => Strings.BROWSER,
+          icon: findAssetId("UploadIcon"),
+          render: () => Promise.resolve().then(() => (init_PluginBrowser(), PluginBrowser_exports))
         }
       ]
     });
