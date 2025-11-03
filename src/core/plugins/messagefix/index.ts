@@ -16,7 +16,7 @@ export default defineCorePlugin({
     display: {
       name: "MessageFix",
       description: "Ensures messages include the required nonce parameter",
-      authors: [{ name: "ShiggyCord Team" }],
+      authors: [ { name: "Win8.1VMUser"}, { name: "kmmiio99o.dev" }],
     },
   },
 

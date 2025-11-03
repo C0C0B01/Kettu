@@ -22,7 +22,6 @@ import {
 } from "@metro/common/components";
 import { ComponentProps } from "react";
 import { View } from "react-native";
-import type { BunnyPluginManifest } from "@lib/addons/plugins/types";
 
 import { UnifiedPluginModel } from "./models";
 import unifyBunnyPlugin from "./models/bunny";

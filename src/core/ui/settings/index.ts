@@ -44,7 +44,7 @@ export default function initSettings() {
             {
                 key: "KETTU_BROWSER",
                 title: () => Strings.BROWSER,
-                icon: findAssetId("UploadIcon"),
+                icon: findAssetId("ChannelListMagnifyingGlassIcon"),
                 render: () => import("@core/ui/settings/pages/PluginBrowser"),
             },
             {

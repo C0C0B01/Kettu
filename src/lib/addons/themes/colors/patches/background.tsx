@@ -55,6 +55,5 @@ export default function patchChatBackground() {
             return <ThemeBackground>{ret}</ThemeBackground>;
         })
     ];
-
     return () => patches.forEach(x => x());
 }

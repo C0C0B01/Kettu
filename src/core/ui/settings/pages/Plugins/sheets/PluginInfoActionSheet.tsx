@@ -41,7 +41,9 @@ export default function PluginInfoActionSheet({
       try {
         const pluginAny = plugin;
         const repoUrl =
+        //@ts-expect-error
           pluginAny._manifest?.parentRepository ||
+          //@ts-expect-error
           pluginAny.manifest?.parentRepository;
         url = repoUrl ? `${repoUrl}/builds/${plugin.id}` : plugin.id;
       } catch (e) {

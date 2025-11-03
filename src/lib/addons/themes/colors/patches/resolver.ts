@@ -30,7 +30,7 @@ function getRawFallback(key: string): string | undefined {
     if (!isDark) return undefined;
     
     const DARK_MODE_RAW_FALLBACK: Record<string, string> = {
-        "PRIMARY_230": origRawColor.PRIMARY_700 || "#000000"
+        "PRIMARY_230": origRawColor.PLUM_19 || "#000000"
     };
     
     return DARK_MODE_RAW_FALLBACK[key];
@@ -85,7 +85,7 @@ export default function patchDefinitionAndResolver() {
 
             const fallbackValue = getRawFallback(colorDef.raw);
             if (fallbackValue) {
-                return colorDef.opacity === 1 ? fallbackValue : chroma(fallbackValue).alpha(colorDef.opacity).hex();
+                return colorDef.opacity === 0 ? fallbackValue : chroma(fallbackValue).alpha(colorDef.opacity).hex();
             }
 
             // Fallback to default

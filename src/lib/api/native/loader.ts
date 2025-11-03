@@ -216,12 +216,7 @@ export function getReactDevToolsVersion() {
 }
 
 export function isSysColorsSupported() {
-    if (isPyonLoader()) return pyonLoaderIdentity.isSysColorsSupported;
-    else if (isVendettaLoader()) {
-        return vendettaLoaderIdentity!!.features.syscolors != null;
-    }
-
-    return false;
+    return true;
 }
 
 export function getSysColors() {

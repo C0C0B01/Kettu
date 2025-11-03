@@ -50,6 +50,7 @@
         "react": "^19.2.0",
         "react-dom": "^19.2.0",
         "react-native": "0.78.0",
+        "react-native": "0.78.0",
         "react-native-reanimated": "^3.18.0",
         "spitroast": "^1.4.4",
         "type-fest": "^4.41.0"

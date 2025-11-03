@@ -1,4 +1,5 @@
-import fixStatusBar from "./fix";
+import fixStatusBar from "./statusbar";
+import fixKeyboard from "./keyboard";
 import patchChatBackground from "./patches/background";
 import patchDefinitionAndResolver from "./patches/resolver";
 import patchStorage from "./patches/storage";
@@ -14,6 +15,7 @@ export default function initColors(manifest: ColorManifest | null) {
     ];
 
     fixStatusBar();
+    fixKeyboard();
 
     if (manifest) updateBunnyColor(manifest, { update: false });
 
