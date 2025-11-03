@@ -1,6 +1,6 @@
 <div align="center">
 
-  <img src="Images/kettu_logo.png" alt="Kettu logo" width="200px" style="border-radius: 50%" />
+  <img src="src/assets/icons/kettu.png" alt="Saukko logo" width="200px" style="border-radius: 50%" />
   
   # 🦦 Saukko
 
