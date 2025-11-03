@@ -13,7 +13,7 @@
 
 ## 📥 Installing
 
-### Installe coming soon.
+### Installer coming soon.
 
 ## For now:
 1. Install [Kettu](https://codeberg.org/cocobo1/Kettu) with the [Kettu Manager](https://codeberg.org/cocobo1/KettuManager).
