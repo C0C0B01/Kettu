@@ -30,7 +30,8 @@
     ```
     git clone https://codeberg.org/cocobo1/Kettu
     ```
-    https://carbon.now.sh/65a2e51a-0149-43a4-b985-33908ef26895
+    https://carbon.now.sh/65a2e51a-0149-43a4-b985-33908ef26895.png
+   
 1. Install dependencies:
     ```
     bun i
