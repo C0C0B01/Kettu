@@ -7,6 +7,7 @@
   Easily install Saukko on Android
 
 </div>
+
 > [!CAUTION]
 > Using Saukko might get you banned from discord.
 
