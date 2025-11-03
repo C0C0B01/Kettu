@@ -47,4 +47,5 @@
 Alternatively, you can directly *serve* the bundled code by running `bun run serve`. `kettu.js` will be served on your local address under the port 4040. You will then insert `http://<local ip address>:4040/kettu.js` as a custom url and reload. Whenever you restart your mobile client, the script will rebuild the bundle as your client fetches it.
 # Images
 <img src="https://github.com/Vaiskiainen/Saukko/blob/github/src/assets/icons/AddonBrowser.png?raw=true" height="750">
+<img src="https://github.com/Vaiskiainen/Saukko/blob/github/src/assets/icons/ThemesPage.png?raw=true" height="750">
 ## Forked from: [Kettu](https://codeberg.org/cocobo1/Kettu)
