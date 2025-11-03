@@ -1,18 +1,26 @@
-# Kettu
-A mod for Discord on Android
+<div align="center">
 
-### [![Discord](https://img.shields.io/discord/1368145952266911755?logo=discord&logoColor=%23ffffffff&color=%231D88CF&link=https%3A%2F%2Fdiscord.gg%2F6cN7wKa8gp)](https://discord.gg/6cN7wKa8gp) [![Static Badge](https://img.shields.io/badge/kofi-cocobo1-%23FF6433?style=flat&logo=ko-fi&labelColor=%23ffffff)](https://www.ko-fi.com/cocobo1) ![Codeberg Last Commit](https://img.shields.io/gitea/last-commit/cocobo1/Kettu?gitea_url=https%3A%2F%2Fwww.codeberg.org&logo=codeberg&logoColor=%23ffffffff)
+  <img src="Images/kettu_logo.png" alt="Kettu logo" width="200px" style="border-radius: 50%" />
+  
+  # 🦦 Saukko
 
-## Installing
+  Easily install Saukko on Android
 
-### Android
-- **Root** with Xposed - [KettuXposed](https://github.com/C0C0B01/KettuXposed/releases/latest)
-- **Non-root** - [KettuManager](https://github.com/C0C0B01/KettuManager/releases/latest)
+</div>
 
-### iOS
-- [BTLoader](https://github.com/CloudySn0w/BTLoader)
+## 📥 Installing
 
-## Building
+### Coming soon.
+
+## For now:
+1. Install [Kettu](https://codeberg.org/cocobo1/Kettu) with the [Kettu Manager](https://codeberg.org/cocobo1/KettuManager).
+2. Go to the Kettu settings.
+3. Activate "Developer settings"
+4. Load Kettu from a custom URL
+5. Enter the url: https://raw.githubusercontent.com/Vaiskiainen/Saukko/refs/heads/github/dist/kettu.js
+6. Enjoy using Saukko.
+
+## 👷🏽‍♂️ Building
 1. Install a Kettu loader with loader config support (any mentioned in the [Installing](#installing) section).
 1. Go to Settings > General and enable Developer Settings.
 1. Clone the repo:
