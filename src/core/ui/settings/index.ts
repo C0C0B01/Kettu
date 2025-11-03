@@ -54,12 +54,6 @@ export default function initSettings() {
                 render: () => import("@core/ui/settings/pages/Developer"),
                 usePredicate: () => useProxy(settings).developerSettings ?? false
             },
-            {
-                key: "SAUKKO_BROWSER",
-                title: () => Strings.BROWSER,
-                icon: findAssetId("UploadIcon"),
-                render: () => import("@core/ui/settings/pages/PluginBrowser"),
-            }
         ]
     });
 
