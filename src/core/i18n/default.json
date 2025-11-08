@@ -35,6 +35,7 @@
     "COPY_URL": "Copy URL",
     "DEBUG": "Debug",
     "DEBUGGER_URL": "Debugger URL",
+    "DEVTOOLS_URL": "DevTools URL",
     "DELETE": "Delete",
     "DESC_EXTRACT_FONTS_FROM_THEME": "Looks out for \"fonts\" field in your currently applied theme and install it.",
     "DEVELOPER": "Developer",
@@ -63,7 +64,7 @@
     "LABEL_EXTRACT_FONTS_FROM_THEME": "Extract font from theme",
     "LINKS": "Links",
     "LOAD_FROM_CUSTOM_URL": "Load from custom URL",
-    "LOAD_FROM_CUSTOM_URL_DEC": "Load Saukko from a custom endpoint.",
+    "LOAD_FROM_CUSTOM_URL_DEC": "Load Kettu from a custom endpoint.",
     "LOAD_REACT_DEVTOOLS": "Load React DevTools",
     "LOADER": "Loader",
     "MACHINE_ID": "Machine ID",
@@ -115,7 +116,7 @@
     "UH_OH": "Uh Oh",
     "UNINSTALL": "Uninstall",
     "UNINSTALL_TITLE": "Uninstall {title}",
-    "URL_PLACEHOLDER": "https://github.com/vaiskiainen/saukko",
+    "URL_PLACEHOLDER": "https://codeberg.org/cocobo1/Kettu",
     "VERSION": "Version",
     "VERSIONS": "Versions"
 }

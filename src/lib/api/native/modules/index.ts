@@ -33,3 +33,6 @@ export const NativeThemeModule = getNativeModule(
 export const BundleUpdaterManager = getNativeModule(
     "BundleUpdaterManager"
 )!;
+export const ImageLoader = getNativeModule(
+    "ImageLoader"
+)!;

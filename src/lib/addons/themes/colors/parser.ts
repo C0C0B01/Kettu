@@ -90,7 +90,6 @@ export function parseColorManifest(manifest: ColorManifest): InternalColorDefini
             manifest.rawColors = draft;
         }
 
-
         return {
             spec: 2,
             reference: resolveType(),
@@ -100,8 +99,96 @@ export function parseColorManifest(manifest: ColorManifest): InternalColorDefini
         };
     }
 
+    if (manifest.spec === 1 || (manifest.theme_color_map && !manifest.spec)) {
+
+        const semanticDefinitions: InternalColorDefinition["semantic"] = {};
+        const rawDefinitions: Record<string, string> = {};
+
+        const themeIndex = resolveType() === "light" ? 1 : 0;
+
+        if (manifest.theme_color_map) {
+            for (const [key, colorArray] of Object.entries(manifest.theme_color_map)) {
+                if (!Array.isArray(colorArray) || colorArray.length < 2) {
+                    console.warn(`[Parser] Invalid color array for ${key}:`, colorArray);
+                    continue;
+                }
+
+                const colorValue = colorArray[themeIndex];
+
+                if (!colorValue) {
+                    console.warn(`[Parser] Missing color value for ${key} at index ${themeIndex}`);
+                    continue;
+                }
+
+                const normalized = normalizeToHex(colorValue);
+                if (normalized) {
+                    semanticDefinitions[key] = {
+                        value: normalized,
+                        opacity: 1
+                    };
+                }
+            }
+        }
+
+        const rawColors = manifest.colours || manifest.colors;
+        if (rawColors) {
+            for (const [key, colorValue] of Object.entries(rawColors)) {
+                if (typeof colorValue !== "string") continue;
+
+                const normalized = normalizeToHex(colorValue);
+                if (normalized) {
+                    const discordKey = convertEnmityToDiscordRawKey(key);
+                    rawDefinitions[discordKey] = normalized;
+
+                    if (discordKey !== key) {
+                        rawDefinitions[key] = normalized;
+                    }
+                }
+            }
+        }
+
+        if (manifest.unsafe_colors) {
+            for (const [key, colorValue] of Object.entries(manifest.unsafe_colors)) {
+                if (typeof colorValue !== "string") continue;
+
+                const normalized = normalizeToHex(colorValue);
+                if (normalized) {
+                    rawDefinitions[key] = normalized;
+                }
+            }
+        }
+
+        if (Platform.OS === "android") applyAndroidAlphaKeys(rawDefinitions);
+
+        return {
+            spec: 2,
+            reference: resolveType(),
+            semantic: semanticDefinitions,
+            raw: rawDefinitions,
+            background: manifest.background
+        };
+    }
     throw new Error("Invalid theme spec");
 }
+
+  function convertEnmityToDiscordRawKey(enmityKey: string): string {
+      const conversions: Record<string, string> = {
+          "PRIMARY_DARK": "PRIMARY_100",
+          "PRIMARY_DARK_100": "PRIMARY_100",
+          "PRIMARY_DARK_200": "PRIMARY_200",
+          "PRIMARY_DARK_300": "PRIMARY_300",
+          "PRIMARY_DARK_360": "PRIMARY_360",
+          "PRIMARY_DARK_400": "PRIMARY_400",
+          "PRIMARY_DARK_500": "PRIMARY_500",
+          "PRIMARY_DARK_600": "PRIMARY_600",
+          "PRIMARY_DARK_630": "PRIMARY_630",
+          "PRIMARY_DARK_700": "PRIMARY_700",
+          "PRIMARY_DARK_800": "PRIMARY_800",
+          "PRIMARY_DARK_900": "PRIMARY_900",
+        };
+
+      return conversions[enmityKey] || enmityKey;
+    }
 
 export function applyAndroidAlphaKeys(rawColors?: Record<string, string>) {
     if (!rawColors) return;
@@ -129,6 +216,11 @@ export function applyAndroidAlphaKeys(rawColors?: Record<string, string>) {
 
 export function normalizeToHex(colorString: string | undefined): string | undefined {
     if (colorString === undefined) return undefined;
+
+    if (colorString.toLowerCase() === "transparent") {
+        return "#00000000";
+    }
+
     if (chroma.valid(colorString)) return chroma(colorString).hex();
 
     const color = Number(processColor(colorString));
@@ -140,4 +232,3 @@ export function normalizeToHex(colorString: string | undefined): string | undefi
         color >> 24 & 0xff // alpha
     ).hex();
 }
-

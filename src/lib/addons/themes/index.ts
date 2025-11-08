@@ -53,19 +53,26 @@ function processData(data: VendettaThemeManifest) {
         if (Platform.OS === "android") applyAndroidAlphaKeys(rawColors);
     }
 
-    // this field is required by the spec but vd seems to ignore this
-    // so are most vd themes
-    data.spec ??= 2;
+    if (data.spec === undefined) {
+        if (!('theme_color_map' in data)) {
+          data.spec = 2;
+        }
+        //If not then Enmity theme and no spec
+    }
 
     return data;
 }
 
 function validateTheme(themeJSON: any): boolean {
     if (typeof themeJSON !== "object" || themeJSON === null) return false;
-    if (themeJSON.spec !== 2 && themeJSON.spec !== 3) return false;
+
     if (themeJSON.spec === 3 && !themeJSON.main) return false;
 
-    return true;
+    if (themeJSON.spec === 2) return true;
+
+    if (themeJSON.theme_color_map) return true;
+
+    return themeJSON.spec === 2 || themeJSON.spec === 3;
 }
 
 export async function fetchTheme(url: string, selected = false) {

@@ -15,13 +15,14 @@ import { ErrorBoundary } from "@ui/components";
 import { createStyles, TextStyleSheet } from "@ui/styles";
 import { NativeModules } from "react-native";
 import { ScrollView, StyleSheet } from "react-native";
+import { showToast } from "@ui/toasts";
 
 const { hideActionSheet } = lazyDestructure(() => findByProps("openLazy", "hideActionSheet"));
 const { showSimpleActionSheet } = lazyDestructure(() => findByProps("showSimpleActionSheet"));
 const { openAlert } = lazyDestructure(() => findByProps("openAlert", "dismissAlert"));
 const { AlertModal, AlertActionButton } = lazyDestructure(() => findByProps("AlertModal", "AlertActions"));
 
-const RDT_EMBED_LINK = "";
+const RDT_EMBED_LINK = "https://cdn.bwlok.dev/rdt/devTools.js";
 
 const useStyles = createStyles({
     leadingText: {
@@ -44,31 +45,75 @@ export default function Developer() {
         <ErrorBoundary>
             <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: 38 }}>
                 <Stack style={{ paddingVertical: 24, paddingHorizontal: 12 }} spacing={24}>
-                    <TextInput
-                        label={Strings.DEBUGGER_URL}
-                        placeholder="127.0.0.1:9090"
-                        size="md"
-                        leadingIcon={() => <LegacyFormText style={styles.leadingText}>ws://</LegacyFormText>}
-                        defaultValue={settings.debuggerUrl}
-                        onChange={(v: string) => settings.debuggerUrl = v}
-                    />
-                    <TableRowGroup title={Strings.DEBUG}>
-                        <TableRow
-                            label={Strings.CONNECT_TO_DEBUG_WEBSOCKET}
-                            icon={<TableRow.Icon source={findAssetId("copy")} />}
-                            onPress={() => connectToDebugger(settings.debuggerUrl)}
-                        />
-                        {isReactDevToolsPreloaded() && <>
-                            <TableRow
-                                label={Strings.CONNECT_TO_REACT_DEVTOOLS}
-                                icon={<TableRow.Icon source={findAssetId("ic_badge_staff")} />}
-                                onPress={() => window[getReactDevToolsProp() || "__vendetta_rdc"]?.connectToDevTools({
-                                    host: settings.debuggerUrl.split(":")?.[0],
-                                    resolveRNStyle: StyleSheet.flatten,
-                                })}
-                            />
-                        </>}
+
+                    <TableRowGroup title={Strings.DEBUGGER_URL}>
+                      <TextInput
+                          placeholder="127.0.0.1:9090"
+                          size="md"
+                          leadingIcon={() => <LegacyFormText style={styles.leadingText}>ws://</LegacyFormText>}
+                          defaultValue={settings.debuggerUrl}
+                          onChange={(v: string) => settings.debuggerUrl = v}
+                      />
+                      <Stack style={{
+                          marginTop: 4,
+                          borderTopLeftRadius: 16,
+                          borderTopRightRadius: 16,
+                          overflow: 'hidden'
+                      }}>
+                          <TableRow
+                              label={Strings.CONNECT_TO_DEBUG_WEBSOCKET}
+                              icon={<TableRow.Icon source={findAssetId("copy")} />}
+                              onPress={() => connectToDebugger(settings.debuggerUrl)}
+                          />
+                      </Stack>
+
                     </TableRowGroup>
+                    {isReactDevToolsPreloaded() && <>
+                      <TableRowGroup title={Strings.DEVTOOLS_URL}>
+
+                      <TextInput
+                          placeholder="127.0.0.1:8097"
+                          size="md"
+                          leadingIcon={() => <LegacyFormText style={styles.leadingText}>ws://</LegacyFormText>}
+                          defaultValue={settings.devToolsUrl}
+                          onChange={(v: string) => settings.devToolsUrl = v}
+                      />
+                      <Stack style={{
+                          marginTop: 4,
+                          borderTopLeftRadius: 16,
+                          borderTopRightRadius: 16,
+                          overflow: 'hidden'
+                      }}>
+                        <TableRow
+                            label={Strings.CONNECT_TO_REACT_DEVTOOLS}
+                            icon={<TableRow.Icon source={findAssetId("ic_badge_staff")} />}
+                            onPress={async () => {
+                                if (!settings.devToolsUrl?.trim()) {
+                                    showToast("Invalid devTools URL!", findAssetId("Small"));
+                                    return;
+                                }
+
+                                try {
+                                    const devTools = window[getReactDevToolsProp() || "__vendetta_rdc"];
+
+                                    if (!devTools?.connectToDevTools) {
+                                        showToast("Invalid devTools URL!", findAssetId("Small"));
+                                        return;
+                                    }
+
+                                    await devTools.connectToDevTools({
+                                        host: settings.devToolsUrl.split(":")?.[0],
+                                        resolveRNStyle: StyleSheet.flatten,
+                                    });
+                                } catch (error) {
+                                    showToast("Invalid devTools URL!", findAssetId("Small"));
+                                }
+                            }}
+
+                        />
+                      </Stack>
+                      </TableRowGroup>
+                    </>}
                     {isLoaderConfigSupported() && <>
                         <TableRowGroup title="Loader config">
                             <TableSwitchRow

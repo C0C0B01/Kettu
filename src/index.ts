@@ -19,8 +19,6 @@ import * as lib from "./lib";
 export default async () => {
     // Load everything in parallel
 
-    updatePlugins();
-
     await Promise.all([
         initThemes(),
         injectFluxInterceptor(),

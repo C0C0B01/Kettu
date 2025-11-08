@@ -39,7 +39,7 @@ export interface VendettaThemeManifest {
 
 /** @internal */
 export interface InternalColorDefinition {
-    spec: 2 | 3;
+    spec: 1 | 2 | 3;
     reference: "darker" | "light";
     semantic: Record<string, {
         value: string;

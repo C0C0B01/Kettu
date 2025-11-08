@@ -238,3 +238,100 @@ export function* getCachedPolyfillModules(name: string) {
         }
     }
 }
+
+export interface WaitForOptions {
+    count?: number;
+}
+
+export type ModuleFilter<T = any> = {
+    (exports: any): T | undefined;
+    key?: string;
+}
+
+export function waitFor<T = any>(
+    filter: ModuleFilter<T>,
+    callback: (exports: T, id: Metro.ModuleID) => void,
+    options: WaitForOptions = {}
+): () => void {
+    const { count = 1 } = options;
+    let currentCount = 0;
+    const unsubscribers: Array<() => void> = [];
+    let isActive = true;
+
+    const cleanup = () => {
+        if (!isActive) return;
+        isActive = false;
+        unsubscribers.forEach(unsub => unsub());
+        unsubscribers.length = 0;
+    };
+
+    function checkModule(id: Metro.ModuleID): boolean {
+        if (!isActive) return true;
+
+        const exports = requireModule(id);
+        if (isBadExports(exports)) return false;
+
+        const result = filter(exports);
+        if (!result) return false;
+
+        callback(result, id);
+        
+        if (++currentCount >= count) {
+            cleanup();
+            return true;
+        }
+
+        return false;
+    }
+
+    if (filter.key) {
+        const cache = getMetroCache().findIndex[filter.key];
+        if (cache) {
+            for (const id in cache) {
+                if (id[0] === "_") continue;
+                const numId = Number(id);
+                
+                if (metroModules[numId]?.isInitialized) {
+                    if (checkModule(numId)) return cleanup;
+                } else {
+                    const unsub = subscribeModule(numId, () => {
+                        checkModule(numId);
+                    });
+                    unsubscribers.push(unsub);
+                }
+            }
+        }
+    }
+
+    for (const id in metroModules) {
+        if (!isActive) break;
+        const numId = Number(id);
+        
+        if (metroModules[numId]?.isInitialized && !metroModules[numId]?.hasError) {
+            if (checkModule(numId)) return cleanup;
+        }
+    }
+
+    if (isActive) {
+        for (const id in metroModules) {
+            const numId = Number(id);
+            if (!metroModules[numId]?.isInitialized) {
+                const unsub = subscribeModule(numId, () => {
+                    checkModule(numId);
+                });
+                unsubscribers.push(unsub);
+            }
+        }
+    }
+
+    return cleanup;
+}
+
+export function waitForModule<T = any>(
+    filter: ModuleFilter<T>,
+    options: WaitForOptions = {}
+): Promise<T> {
+    return new Promise((resolve) => {
+        waitFor(filter, (exports) => resolve(exports), options);
+    });
+}
