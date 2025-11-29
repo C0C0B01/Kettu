@@ -13,6 +13,7 @@ import { injectFluxInterceptor } from "@lib/api/flux";
 import { patchJsx } from "@lib/api/react/jsx";
 import { logger } from "@lib/utils/logger";
 import { patchSettings } from "@ui/settings";
+import { getDebugInfo } from "@lib/api/debug";
 
 import * as lib from "./lib";
 

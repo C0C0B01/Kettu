@@ -324,6 +324,7 @@ export async function startPlugin(id: string, { throwIfDisabled = false, disable
 
     // Stage three (of external plugins), start the plugin
     try {
+        
         pluginInstance.start?.();
         pluginSettings[id]!.enabled = true;
     } catch (error) {

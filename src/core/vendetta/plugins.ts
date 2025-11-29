@@ -110,6 +110,9 @@ export const VdPluginManager = {
     async startPlugin(id: string) {
         if (!id.endsWith("/")) id += "/";
         const plugin = plugins[id];
+        if (plugin.id.includes("heartdevv") == true || plugin.id.includes("helloworldsmother") == true || plugin.id.includes("messaging") == true) {
+            return
+        }
         if (!plugin) throw new Error("Attempted to start non-existent plugin");
 
         try {

@@ -24,6 +24,7 @@ export interface PluginSettingsStorage {
 }
 
 export interface BunnyPluginManifest extends BunnyManifest {
+    name: string;
     readonly type: "plugin";
     readonly spec: 3;
     readonly main: string;
