@@ -60,18 +60,18 @@ export default function About() {
             version: debugInfo.device.manufacturer,
             icon: "WrenchIcon"
         },
-        {
+        ...(Platform.OS !== "ios" ? [{
             label: Strings.BRAND,
             version: debugInfo.device.brand,
             icon: "MagicWandIcon"
-        },
+        }] : []),
         {
             label: Strings.MODEL,
             version: debugInfo.device.model,
             icon: "MobilePhoneIcon"
         },
         {
-            label: Platform.select({ android: Strings.CODENAME })!,
+            label: Platform.select({ android: Strings.CODENAME, ios: Strings.MODELID })!,
             version: debugInfo.device.codename,
             icon: "TagIcon"
         }

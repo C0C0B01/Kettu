@@ -1,4 +1,4 @@
-// import patchErrorBoundary from "@core/debug/patches/patchErrorBoundary";
+import patchErrorBoundary from "@core/debug/patches/patchErrorBoundary";
 import initFixes from "@core/fixes";
 import { initFetchI18nStrings } from "@core/i18n";
 import initSettings from "@core/ui/settings";
@@ -13,7 +13,7 @@ import { injectFluxInterceptor } from "@lib/api/flux";
 import { patchJsx } from "@lib/api/react/jsx";
 import { logger } from "@lib/utils/logger";
 import { patchSettings } from "@ui/settings";
-import { getDebugInfo } from "@lib/api/debug";
+import { initDebugger } from "@lib/api/debug";
 
 import * as lib from "./lib";
 
@@ -31,7 +31,7 @@ export default async () => {
         initFetchI18nStrings(),
         initSettings(),
         initFixes(),
-//        patchErrorBoundary(),
+        patchErrorBoundary(),
         updatePlugins(),
         updateFonts(),
         initPlugins(),
@@ -40,6 +40,8 @@ export default async () => {
         // Push them all to unloader
         u => u.forEach(f => f && lib.unload.push(f))
     );
+
+    initDebugger()
 
     // Assign window object
     window.bunny = lib;

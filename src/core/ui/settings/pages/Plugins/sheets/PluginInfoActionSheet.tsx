@@ -11,6 +11,7 @@ import { useState } from "react";
 import { ScrollView, View } from "react-native";
 import TitleComponent from "./TitleComponent";
 import { PluginInfoActionSheetProps } from "./common";
+import { semanticColors } from "@lib/ui/color";
 
 function PluginInfoIconButton(props) {
   const { onPress } = props;
@@ -205,7 +206,10 @@ export default function PluginInfoActionSheet({
           <Text
             variant="text-md/semibold"
             color="text-primary"
-            style={{ marginBottom: 4 }}
+            style={{
+              marginBottom: 4,
+              color: semanticColors.HEADER_PRIMARY,
+            }}
           >
             Description
           </Text>

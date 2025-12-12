@@ -4,7 +4,7 @@ import { getStoredTheme, getThemeFilePath, isPyonLoader, isThemeSupported } from
 import { awaitStorage as newAwaitStorage } from "@lib/api/storage";
 import { safeFetch } from "@lib/utils";
 import { Platform } from "react-native";
-
+import { settings } from "@lib/api/settings";
 import initColors from "./colors";
 import { applyAndroidAlphaKeys, normalizeToHex } from "./colors/parser";
 import { colorsPref } from "./colors/preferences";
@@ -149,6 +149,7 @@ export function getThemeFromLoader(): VdThemeInfo | null {
  */
 export async function initThemes() {
     if (!isThemeSupported()) return;
+    if (settings.safeMode?.enabled) return;
 
     try {
         if (isPyonLoader()) {

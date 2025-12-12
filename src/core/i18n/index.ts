@@ -44,8 +44,8 @@ export function initFetchI18nStrings() {
 
         if (!_loadedLocale.has(resolvedLocale)) {
             _loadedLocale.add(resolvedLocale);
-
-            fetch(`https://raw.githubusercontent.com/C0C0B01/i18n/main/resources/${resolvedLocale}/kettu.json`)
+            
+            fetch(`https://codeberg.org/cocobo1/kettu-i18n/src/branch/main/base/${resolvedLocale}.json`)
                 .then(r => r.json())
                 .then(strings => _loadedStrings[resolvedLocale] = strings)
                 .then(() => resolvedLocale === _lastSetLocale && (_currentLocale = resolvedLocale))

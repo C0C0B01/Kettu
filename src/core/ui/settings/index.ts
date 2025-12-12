@@ -37,7 +37,7 @@ export default function initSettings() {
             {
                 key: "BUNNY_FONTS",
                 title: () => Strings.FONTS,
-                icon: findAssetId("ic_add_text"),
+                icon: findAssetId("LettersIcon"),
                 render: () => import("@core/ui/settings/pages/Fonts"),
                 usePredicate: () => isFontSupported()
             },

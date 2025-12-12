@@ -22,7 +22,8 @@ const { showSimpleActionSheet } = lazyDestructure(() => findByProps("showSimpleA
 const { openAlert } = lazyDestructure(() => findByProps("openAlert", "dismissAlert"));
 const { AlertModal, AlertActionButton } = lazyDestructure(() => findByProps("AlertModal", "AlertActions"));
 
-const RDT_EMBED_LINK = "https://cdn.bwlok.dev/rdt/devTools.js";
+// todo: This link isnt minified, but it probably should be
+const RDT_EMBED_LINK = "https://codeberg.org/raincord/Devtools/raw/branch/main/reactDevtools.js";
 
 const useStyles = createStyles({
     leadingText: {
@@ -60,12 +61,20 @@ export default function Developer() {
                           borderTopRightRadius: 16,
                           overflow: 'hidden'
                       }}>
-                          <TableRow
-                              label={Strings.CONNECT_TO_DEBUG_WEBSOCKET}
-                              icon={<TableRow.Icon source={findAssetId("copy")} />}
-                              onPress={() => connectToDebugger(settings.debuggerUrl)}
-                          />
+                        <TableSwitchRow
+                            label={Strings.AUTO_DEBUGGER}
+                            icon={<TableRow.Icon source={findAssetId("copy")} />}
+                            value={settings.autoDebugger}
+                            onValueChange={(v: boolean) => {
+                                settings.autoDebugger = v;
+                            }}
+                        />
                       </Stack>
+                      <TableRow
+                          label={Strings.CONNECT_TO_DEBUG_WEBSOCKET}
+                          icon={<TableRow.Icon source={findAssetId("copy")} />}
+                          onPress={() => connectToDebugger(settings.debuggerUrl)}
+                      />
 
                     </TableRowGroup>
                     {isReactDevToolsPreloaded() && <>
@@ -84,14 +93,23 @@ export default function Developer() {
                           borderTopRightRadius: 16,
                           overflow: 'hidden'
                       }}>
-                        <TableRow
-                            label={Strings.CONNECT_TO_REACT_DEVTOOLS}
+                        <TableSwitchRow
+                            label={Strings.AUTO_DEVTOOLS}
                             icon={<TableRow.Icon source={findAssetId("ic_badge_staff")} />}
-                            onPress={async () => {
-                                if (!settings.devToolsUrl?.trim()) {
-                                    showToast("Invalid devTools URL!", findAssetId("Small"));
-                                    return;
-                                }
+                            value={settings.autoDevTools}
+                            onValueChange={(v: boolean) => {
+                                settings.autoDevTools = v;
+                            }}
+                        />
+                      </Stack>
+                      <TableRow
+                          label={Strings.CONNECT_TO_REACT_DEVTOOLS}
+                          icon={<TableRow.Icon source={findAssetId("ic_badge_staff")} />}
+                          onPress={async () => {
+                              if (!settings.devToolsUrl?.trim()) {
+                                  showToast("Invalid devTools URL!", findAssetId("Small"));
+                                  return;
+                              }
 
                                 try {
                                     const devTools = window[getReactDevToolsProp() || "__vendetta_rdc"];
@@ -110,8 +128,7 @@ export default function Developer() {
                                 }
                             }}
 
-                        />
-                      </Stack>
+                      />
                       </TableRowGroup>
                     </>}
                     {isLoaderConfigSupported() && <>

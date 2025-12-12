@@ -24,18 +24,6 @@ const SEMANTIC_FALLBACK_MAP: Record<string, string> = {
 
 const origRawColor = { ...tokenReference.RawColor };
 
-function getRawFallback(key: string): string | undefined {
-    const isDark = isThemeModule.isThemeDark?.(_colorRef.current?.reference);
-    
-    if (!isDark) return undefined;
-    
-    const DARK_MODE_RAW_FALLBACK: Record<string, string> = {
-        "PRIMARY_230": origRawColor.PLUM_19 || "#000000"
-    };
-    
-    return DARK_MODE_RAW_FALLBACK[key];
-}
-
 export default function patchDefinitionAndResolver() {
     const callback = ([theme]: any[]) => theme === _colorRef.key ? [_colorRef.current!.reference] : void 0;
 
@@ -46,9 +34,6 @@ export default function patchDefinitionAndResolver() {
             get: () => {
                 const ret = _colorRef.current?.raw[key];
                 if (ret) return ret;
-                
-                const fallback = getRawFallback(key);
-                if (fallback) return fallback;
                 
                 return origRawColor[key];
             }
@@ -81,11 +66,6 @@ export default function patchDefinitionAndResolver() {
             if (rawValue) {
                 // Set opacity if needed
                 return colorDef.opacity === 1 ? rawValue : chroma(rawValue).alpha(colorDef.opacity).hex();
-            }
-
-            const fallbackValue = getRawFallback(colorDef.raw);
-            if (fallbackValue) {
-                return colorDef.opacity === 0 ? fallbackValue : chroma(fallbackValue).alpha(colorDef.opacity).hex();
             }
 
             // Fallback to default

@@ -11,7 +11,7 @@ async function initializeKettu() {
         Object.freeze = Object.seal = Object;
 
         await require("@metro/internals/caches").initMetroCache();
-        await require(".").default();
+        require(".").default();
     } catch (e) {
         const { ClientInfoManager } = require("@lib/api/native/modules");
         const stack = e instanceof Error ? e.stack : undefined;

@@ -1,6 +1,6 @@
 import { getThemeFromLoader, selectTheme, themes } from "@lib/addons/themes";
 import { findAssetId } from "@lib/api/assets";
-import { getLoaderName, getLoaderVersion, isThemeSupported } from "@lib/api/native/loader";
+import { getLoaderName, getLoaderVersion, isThemeSupported, getReactDevToolsProp } from "@lib/api/native/loader";
 import { BundleUpdaterManager, NativeClientInfoModule, NativeDeviceModule } from "@lib/api/native/modules";
 import { after } from "@lib/api/patcher";
 import { settings } from "@lib/api/settings";
@@ -8,6 +8,7 @@ import { logger } from "@lib/utils/logger";
 import { showToast } from "@ui/toasts";
 import { version } from "bunny-build-info";
 import { Platform, type PlatformConstants } from "react-native";
+import { StyleSheet } from "react-native";
 
 export interface RNConstants extends PlatformConstants {
     // Android
@@ -163,4 +164,38 @@ export function getDebugInfo() {
             }
         )!
     };
+}
+
+
+/**
+ * @internal
+ */
+export function initDebugger() {
+    if (settings.autoDebugger) {
+      try {
+          connectToDebugger(settings.debuggerUrl);
+      } catch (e) {
+          logger.error("Failed to connect to Debugger during startup:", e);
+      }
+    }
+    if (settings.autoDevTools) {
+      try {
+        (async () => {
+          const devTools = window[getReactDevToolsProp() || "__vendetta_rdc"];
+
+          if (!devTools?.connectToDevTools) {
+            showToast("Invalid devTools URL!", findAssetId("Small"));
+            return;
+          }
+
+          await devTools.connectToDevTools({
+            host: settings.devToolsUrl.split(":")?.[0],
+            resolveRNStyle: StyleSheet.flatten,
+          });
+        })();
+      } catch (e) {
+          logger.error("Failed to connect to ReactDevTools during startup:", e);
+      }
+    }
+
 }

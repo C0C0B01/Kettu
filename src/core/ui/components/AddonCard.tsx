@@ -32,7 +32,7 @@ const useStyles = createStyles({
     },
     headerLabel: {
         ...TextStyleSheet["heading-md/semibold"],
-        color: semanticColors.TEXT_NORMAL,
+        color: semanticColors.HEADER_PRIMARY,
     },
     headerSubtitle: {
         ...TextStyleSheet["text-md/semibold"],
@@ -40,7 +40,7 @@ const useStyles = createStyles({
     },
     descriptionLabel: {
         ...TextStyleSheet["text-md/semibold"],
-        color: semanticColors.TEXT_NORMAL,
+        color: semanticColors.HEADER_PRIMARY,
     },
     actions: {
         flexDirection: "row-reverse",
