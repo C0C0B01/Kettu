@@ -3,7 +3,7 @@ import { CheckState, useFileExists } from "@core/ui/hooks/useFS";
 import AssetBrowser from "@core/ui/settings/pages/Developer/AssetBrowser";
 import { useProxy } from "@core/vendetta/storage";
 import { findAssetId } from "@lib/api/assets";
-import { connectToDebugger } from "@lib/api/debug";
+import { connectToDebugger, disconnectFromDebugger, isConnectedToDebugger } from "@lib/api/debug";
 import { getReactDevToolsProp, getReactDevToolsVersion, isLoaderConfigSupported, isReactDevToolsPreloaded, isVendettaLoader } from "@lib/api/native/loader";
 import { loaderConfig, settings } from "@lib/api/settings";
 import { lazyDestructure } from "@lib/utils/lazy";
@@ -16,14 +16,14 @@ import { createStyles, TextStyleSheet } from "@ui/styles";
 import { NativeModules } from "react-native";
 import { ScrollView, StyleSheet } from "react-native";
 import { showToast } from "@ui/toasts";
+import { useState, useEffect } from "react";
 
 const { hideActionSheet } = lazyDestructure(() => findByProps("openLazy", "hideActionSheet"));
 const { showSimpleActionSheet } = lazyDestructure(() => findByProps("showSimpleActionSheet"));
 const { openAlert } = lazyDestructure(() => findByProps("openAlert", "dismissAlert"));
 const { AlertModal, AlertActionButton } = lazyDestructure(() => findByProps("AlertModal", "AlertActions"));
 
-// todo: This link isnt minified, but it probably should be
-const RDT_EMBED_LINK = "https://codeberg.org/raincord/Devtools/raw/branch/main/reactDevtools.js";
+const RDT_EMBED_LINK = "https://codeberg.org/raincord/raindevtools/raw/branch/dev/dist/index.bundle";
 
 const useStyles = createStyles({
     leadingText: {
@@ -35,6 +35,7 @@ const useStyles = createStyles({
 
 export default function Developer() {
     const [rdtFileExists, fs] = useFileExists("preloads/reactDevtools.js");
+    const [isDebuggerConnected, setIsDebuggerConnected] = useState(isConnectedToDebugger());
 
     const styles = useStyles();
     const navigation = NavigationNative.useNavigation();
@@ -42,94 +43,111 @@ export default function Developer() {
     useProxy(settings);
     useProxy(loaderConfig);
 
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setIsDebuggerConnected(isConnectedToDebugger());
+        }, 1000);
+        return () => clearInterval(interval);
+    }, []);
+
+    const handleDebuggerConnect = () => {
+        if (isDebuggerConnected) {
+            disconnectFromDebugger();
+            setIsDebuggerConnected(false);
+        } else {
+            connectToDebugger(settings.debuggerUrl);
+            setTimeout(() => setIsDebuggerConnected(isConnectedToDebugger()), 100);
+        }
+    };
+
     return (
         <ErrorBoundary>
             <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: 38 }}>
                 <Stack style={{ paddingVertical: 24, paddingHorizontal: 12 }} spacing={24}>
 
                     <TableRowGroup title={Strings.DEBUGGER_URL}>
-                      <TextInput
+                        <TextInput
                           placeholder="127.0.0.1:9090"
-                          size="md"
-                          leadingIcon={() => <LegacyFormText style={styles.leadingText}>ws://</LegacyFormText>}
-                          defaultValue={settings.debuggerUrl}
-                          onChange={(v: string) => settings.debuggerUrl = v}
-                      />
-                      <Stack style={{
-                          marginTop: 4,
-                          borderTopLeftRadius: 16,
-                          borderTopRightRadius: 16,
-                          overflow: 'hidden'
-                      }}>
-                        <TableSwitchRow
-                            label={Strings.AUTO_DEBUGGER}
-                            icon={<TableRow.Icon source={findAssetId("copy")} />}
-                            value={settings.autoDebugger}
-                            onValueChange={(v: boolean) => {
-                                settings.autoDebugger = v;
-                            }}
+                            size="md"
+                            leadingIcon={() => <LegacyFormText style={styles.leadingText}>ws://</LegacyFormText>}
+                            defaultValue={settings.debuggerUrl}
+                            onChange={(v: string) => settings.debuggerUrl = v}
                         />
-                      </Stack>
-                      <TableRow
-                          label={Strings.CONNECT_TO_DEBUG_WEBSOCKET}
-                          icon={<TableRow.Icon source={findAssetId("copy")} />}
-                          onPress={() => connectToDebugger(settings.debuggerUrl)}
-                      />
+                        <Stack style={{
+                            marginTop: 4,
+                            borderTopLeftRadius: 16,
+                            borderTopRightRadius: 16,
+                            overflow: 'hidden'
+                        }}>
+                            <TableSwitchRow
+                                label={Strings.AUTO_DEBUGGER}
+                                subLabel={isDebuggerConnected ? "Connected" : undefined}
+                                icon={<TableRow.Icon source={findAssetId("copy")} />}
+                                value={settings.autoDebugger}
+                                onValueChange={(v: boolean) => {
+                                    settings.autoDebugger = v;
+                                }}
+                            />
+                        </Stack>
+                        <TableRow
+                            label={isDebuggerConnected ? "Disconnect from Debugger" : Strings.CONNECT_TO_DEBUG_WEBSOCKET}
+                            icon={<TableRow.Icon source={findAssetId(isDebuggerConnected ? "ic_message_delete" : "copy")} />}
+                            onPress={handleDebuggerConnect}
+                        />
 
                     </TableRowGroup>
                     {isReactDevToolsPreloaded() && <>
-                      <TableRowGroup title={Strings.DEVTOOLS_URL}>
-
-                      <TextInput
-                          placeholder="127.0.0.1:8097"
-                          size="md"
-                          leadingIcon={() => <LegacyFormText style={styles.leadingText}>ws://</LegacyFormText>}
-                          defaultValue={settings.devToolsUrl}
-                          onChange={(v: string) => settings.devToolsUrl = v}
-                      />
-                      <Stack style={{
-                          marginTop: 4,
-                          borderTopLeftRadius: 16,
-                          borderTopRightRadius: 16,
-                          overflow: 'hidden'
-                      }}>
-                        <TableSwitchRow
-                            label={Strings.AUTO_DEVTOOLS}
-                            icon={<TableRow.Icon source={findAssetId("ic_badge_staff")} />}
-                            value={settings.autoDevTools}
-                            onValueChange={(v: boolean) => {
-                                settings.autoDevTools = v;
-                            }}
-                        />
-                      </Stack>
-                      <TableRow
-                          label={Strings.CONNECT_TO_REACT_DEVTOOLS}
-                          icon={<TableRow.Icon source={findAssetId("ic_badge_staff")} />}
-                          onPress={async () => {
-                              if (!settings.devToolsUrl?.trim()) {
-                                  showToast("Invalid devTools URL!", findAssetId("Small"));
-                                  return;
-                              }
-
-                                try {
-                                    const devTools = window[getReactDevToolsProp() || "__vendetta_rdc"];
-
-                                    if (!devTools?.connectToDevTools) {
+                        <TableRowGroup title={Strings.DEVTOOLS_URL}>
+                            
+                            <TextInput
+                                placeholder="127.0.0.1:8097"
+                                size="md"
+                                leadingIcon={() => <LegacyFormText style={styles.leadingText}>ws://</LegacyFormText>}
+                                defaultValue={settings.devToolsUrl}
+                                onChange={(v: string) => settings.devToolsUrl = v}
+                            />
+                            <Stack style={{
+                                marginTop: 4,
+                                borderTopLeftRadius: 16,
+                                borderTopRightRadius: 16,
+                                overflow: 'hidden'
+                            }}>
+                                <TableSwitchRow
+                                    label={Strings.AUTO_DEVTOOLS}
+                                    icon={<TableRow.Icon source={findAssetId("ic_badge_staff")} />}
+                                    value={settings.autoDevTools}
+                                    onValueChange={(v: boolean) => {
+                                        settings.autoDevTools = v;
+                                    }}
+                                />
+                            </Stack>
+                            <TableRow
+                                label={Strings.CONNECT_TO_REACT_DEVTOOLS}
+                                icon={<TableRow.Icon source={findAssetId("ic_badge_staff")} />}
+                                onPress={async () => {
+                                    if (!settings.devToolsUrl?.trim()) {
                                         showToast("Invalid devTools URL!", findAssetId("Small"));
                                         return;
                                     }
 
-                                    await devTools.connectToDevTools({
-                                        host: settings.devToolsUrl.split(":")?.[0],
-                                        resolveRNStyle: StyleSheet.flatten,
-                                    });
-                                } catch (error) {
-                                    showToast("Invalid devTools URL!", findAssetId("Small"));
-                                }
-                            }}
+                                    try {
+                                        const devTools = window[getReactDevToolsProp() || "__vendetta_rdc"];
+                                        
+                                        if (!devTools?.connectToDevTools) {
+                                            showToast("Invalid devTools URL!", findAssetId("Small"));
+                                            return;
+                                        }
 
-                      />
-                      </TableRowGroup>
+                                        await devTools.connectToDevTools({
+                                            host: settings.devToolsUrl.split(":")?.[0],
+                                            resolveRNStyle: StyleSheet.flatten,
+                                        });
+                                    } catch (error) {
+                                        showToast("Invalid devTools URL!", findAssetId("Small"));
+                                    }
+                                }}
+                            />
+                        </TableRowGroup>
                     </>}
                     {isLoaderConfigSupported() && <>
                         <TableRowGroup title="Loader config">
@@ -162,9 +180,7 @@ export default function Developer() {
                     </>}
                     <TableRowGroup title="Other">
                         <TableRow
-                            // Thanks for this Revenge team!
                             label={Strings.CLEAR_BUNDLE}
-
                             icon={<TableRow.Icon source={findAssetId("TrashIcon")} />}
                             onPress={() => {
                                 openAlert("pupu-clear-bundle-reload-confirmation", <AlertModal
@@ -221,12 +237,13 @@ export default function Developer() {
                                     text={rdtFileExists === CheckState.TRUE ? Strings.UNINSTALL : Strings.INSTALL}
                                     onPress={async () => {
                                         if (rdtFileExists === CheckState.FALSE) {
-                                            fs.downloadFile(RDT_EMBED_LINK, "preloads/reactDevtools.js");
+                                            fs.downloadFile(RDT_EMBED_LINK, "preloads/reactDevtools.js")
+                                                .then(() => showToast("Successfully installed! A reload is required", findAssetId("DownloadIcon")));
                                         } else if (rdtFileExists === CheckState.TRUE) {
                                             fs.removeFile("preloads/reactDevtools.js");
                                         }
                                     }}
-                                    icon={findAssetId(rdtFileExists === CheckState.TRUE ? "ic_message_delete" : "DownloadIcon")}
+                                    icon={findAssetId(rdtFileExists === CheckState.TRUE ? "TrashIcon" : "DownloadIcon")}
                                     style={{ marginLeft: 8 }}
                                 />
                             }

@@ -208,7 +208,7 @@ export default function PluginInfoActionSheet({
             color="text-primary"
             style={{
               marginBottom: 4,
-              color: semanticColors.HEADER_PRIMARY,
+              color: "text-strong",
             }}
           >
             Description

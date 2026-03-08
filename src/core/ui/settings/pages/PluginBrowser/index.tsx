@@ -15,7 +15,8 @@ import { ActionSheet, AlertModal, AlertActions, TableRow, TableRowGroup } from "
 import { lazyDestructure } from "@lib/utils/lazy";
 import { findByProps } from "@metro";
 
-const { showSimpleActionSheet, hideActionSheet } = lazyDestructure(() => findByProps("showSimpleActionSheet"));
+const { showSimpleActionSheet } = lazyDestructure(() => findByProps("showSimpleActionSheet"));
+const { hideActionSheet } = findByProps("hideActionSheet")
 
 interface BaseAddonData {
     name: string;
@@ -44,14 +45,14 @@ function normalizeIdFromInstallUrl(url: string) {
 // @ts-ignore (i cant be bothered to type these)
 function InstallButton({ addon, isPluginMode, installing, setInstalling, setRefreshTick }) {
     const normId = normalizeIdFromInstallUrl(addon.installUrl);
-    const [installed, setInstalled] = React.useState(() => 
+    const [installed, setInstalled] = React.useState(() =>
         isPluginMode ? Boolean(VdPluginManager.plugins[normId]) : Boolean(themes[addon.installUrl])
     );
 
     React.useEffect(() => {
         setInstalled(isPluginMode ? Boolean(VdPluginManager.plugins[normId]) : Boolean(themes[addon.installUrl]));
     }, [addon.installUrl, setRefreshTick, isPluginMode]);
-    
+
     const installAddon = async () => {
         if (installing.has(normId)) return;
         setInstalling((prev: Iterable<unknown> | null | undefined) => new Set(prev).add(normId));
@@ -89,7 +90,7 @@ function InstallButton({ addon, isPluginMode, installing, setInstalling, setRefr
 
     const promptInstall = () => {
         if (!isPluginMode) return installAddon();
-        
+
         const plugin = addon as PluginData;
         const needsWarn = (plugin.status && plugin.status !== "working") || (plugin.warningMessage && plugin.warningMessage.trim().length > 0);
         if (!needsWarn) return installAddon();
@@ -196,12 +197,12 @@ function TrailingButtons({ addon, isPluginMode, installing, setInstalling, setRe
                 variant="secondary"
                 icon={findAssetId("MoreHorizontalIcon")}
             />
-            <InstallButton 
+            <InstallButton
                 addon={addon}
                 isPluginMode={isPluginMode}
-                installing={installing} 
-                setInstalling={setInstalling} 
-                setRefreshTick={setRefreshTick} 
+                installing={installing}
+                setInstalling={setInstalling}
+                setRefreshTick={setRefreshTick}
             />
         </Stack>
     );
@@ -237,12 +238,12 @@ function AddonCard({ addon, isPluginMode, installing, setInstalling, setRefreshT
                         )}
                     </View>
                     <View>
-                        <TrailingButtons 
+                        <TrailingButtons
                             addon={addon}
                             isPluginMode={isPluginMode}
-                            installing={installing} 
-                            setInstalling={setInstalling} 
-                            setRefreshTick={setRefreshTick} 
+                            installing={installing}
+                            setInstalling={setInstalling}
+                            setRefreshTick={setRefreshTick}
                         />
                     </View>
                 </View>
@@ -295,7 +296,7 @@ export default function BrowserPage() {
             const response = await safeFetch(url);
             if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
             const data = await response.json();
-            
+
             let addonList: AddonData[] = [];
             if (Array.isArray(data)) {
                 addonList = data;
@@ -305,7 +306,7 @@ export default function BrowserPage() {
                 // Handle any other structure for themes - try common property names
                 addonList = data.OFFICIAL_THEMES || data.themes || data.THEMES || data.items || [];
             }
-            
+
             if (isPluginMode) {
                 setPlugins(addonList as PluginData[]);
             } else {
@@ -410,34 +411,38 @@ export default function BrowserPage() {
 
     return (
         <View style={{ flex: 1 }}>
-            <View style={{ justifyContent: "center", alignItems: "center", paddingHorizontal: 10 }}>
+            <View style={{ paddingHorizontal: 10 }}>
                 <Stack spacing={12}>
-                    <View style={{ flexDirection: "row", justifyContent: "center", alignItems: 'center', paddingTop: 10 }}>
-                        <Stack spacing={10} style={{ flexDirection: "row", justifyContent: "center", alignItems: 'center' }}>
+                    <View style={{ flexDirection: "row", paddingTop: 10 }}>
+                        <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
                             <Button
-                                size="sm"
+                                size="md"
                                 text="Plugins"
                                 variant={mode === "plugins" ? "primary" : "secondary"}
                                 onPress={() => setMode("plugins")}
+                                style={{ flex: 1 }}
                             />
+                            <View style={{ width: 8 }} />
                             <Button
-                                size="sm"
+                                size="md"
                                 text="Themes"
                                 variant={mode === "themes" ? "primary" : "secondary"}
                                 onPress={() => setMode("themes")}
+                                style={{ flex: 1 }}
                             />
-                        </Stack>
+                        </View>
                     </View>
 
                     <View style={{ flexDirection: "row", alignItems: "center", gap: 8, paddingBottom: 6 }}>
-                        <Search 
-                            placeholder={`Search ${mode}...`} 
-                            onChangeText={setSearchQuery} 
+                        <Search
+                            placeholder={`Search ${mode}...`}
+                            isRound={true}
+                            onChangeText={setSearchQuery}
                             style={{ flex: 1 }}
                         />
                         <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
                         <IconButton
-                            size="sm"
+                            size="md"
                             variant="tertiary"
                             icon={findAssetId("MoreVerticalIcon")}
                             disabled={!!searchQuery}
@@ -456,11 +461,11 @@ export default function BrowserPage() {
                             })}
                         />
                     </View>
-                        
+
                     </View>
                 </Stack>
             </View>
-            
+
             <FlashList
                 data={sortedAndFiltered}
                 refreshing={loading}
@@ -484,12 +489,12 @@ export default function BrowserPage() {
                 //@ts-ignore
                 renderItem={({ item: addon }) => (
                     <View style={{ paddingVertical: 6, paddingHorizontal: 8 }}>
-                        <AddonCard 
+                        <AddonCard
                             addon={addon}
                             isPluginMode={mode === "plugins"}
-                            installing={installing} 
-                            setInstalling={setInstalling} 
-                            setRefreshTick={setRefreshTick} 
+                            installing={installing}
+                            setInstalling={setInstalling}
+                            setRefreshTick={setRefreshTick}
                         />
                     </View>
                 )}

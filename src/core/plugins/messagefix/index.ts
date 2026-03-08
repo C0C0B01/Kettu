@@ -33,7 +33,7 @@ export default defineCorePlugin({
     ) {
       // Ensure options exists and has a nonce
       options = options || {};
-      options.nonce = options.nonce || Date.now().toString();
+      options.nonce = options.nonce || (BigInt(Date.now() - 1420070400000) << 22n).toString();
 
       // Call original with fixed parameters
       return originalSendMessage.call(

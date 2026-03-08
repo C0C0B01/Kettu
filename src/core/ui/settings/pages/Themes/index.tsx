@@ -19,8 +19,9 @@ import {
   BottomSheetTitleHeader,
   Button,
   TableRowGroup,
-  TableSwitchRow,
+  TableCheckboxRow,
   TableRowIcon,
+  TableSwitchRow,
 } from "@metro/common/components";
 import { View } from "react-native";
 

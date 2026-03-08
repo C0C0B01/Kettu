@@ -175,10 +175,7 @@ export function getThemeFilePath() {
 
 export function isReactDevToolsPreloaded() {
     if (isPyonLoader()) {
-        return Boolean(window.__reactDevTools);
-    }
-    if (isRa1nLoader()) {
-        return false;
+        return Boolean(window.__REACT_DEVTOOLS__);
     }
     if (isVendettaLoader()) {
         return vendettaLoaderIdentity!!.features.devtools != null;
@@ -191,7 +188,7 @@ export function getReactDevToolsProp(): string | null {
     if (!isReactDevToolsPreloaded()) return null;
 
     if (isPyonLoader()) {
-        window.__pyoncord_rdt = window.__reactDevTools.exports;
+        window.__pyoncord_rdt = window.__REACT_DEVTOOLS__.exports;
         return "__pyoncord_rdt";
     }
 
@@ -206,7 +203,7 @@ export function getReactDevToolsVersion() {
     if (!isReactDevToolsPreloaded()) return null;
 
     if (isPyonLoader()) {
-        return window.__reactDevTools.version || null;
+        return window.__REACT_DEVTOOLS__.version || null;
     }
     if (isVendettaLoader()) {
         return vendettaLoaderIdentity!!.features.devtools!!.version;
